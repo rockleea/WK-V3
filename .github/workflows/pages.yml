@@ -27,7 +27,7 @@ jobs:
         shell: pwsh
         run: |
           Copy-Item dist _site -Recurse
-          ./scripts/prepare-pages.ps1 -Path _site
+          ./scripts/prepare-pages.ps1 -Path _site -Version "$env:GITHUB_SHA"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

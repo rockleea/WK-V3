@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$Path
+    [string]$Path,
+    [string]$Version = $env:GITHUB_SHA
 )
 
 $textExtensions = @('.html', '.css')
@@ -16,6 +17,13 @@ Get-ChildItem -LiteralPath $root -Recurse -File |
                 '(?i)(?<prefix>\b(?:href|src|action|poster)\s*=\s*["''])/(?!/|WK-V3/)',
                 '${prefix}/WK-V3/'
             )
+            if ($Version) {
+                $updated = [regex]::Replace(
+                    $updated,
+                    '(?i)(?<prefix>\bsrc\s*=\s*["''][^"'']*/assets/[^"''?]+\.js)(?<suffix>["''])',
+                    { param($match) $match.Groups['prefix'].Value + '?v=' + [uri]::EscapeDataString($Version) + $match.Groups['suffix'].Value }
+                )
+            }
         } else {
             $updated = [regex]::Replace(
                 $content,
