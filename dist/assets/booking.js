@@ -1,0 +1,6 @@
+(()=>{
+const dialog=document.createElement('dialog');dialog.className='wk-booking';dialog.setAttribute('aria-labelledby','wk-booking-title');dialog.innerHTML='<header><h2 id="wk-booking-title">Réserver un appel découverte</h2><button type="button" aria-label="Fermer le calendrier">×</button></header><iframe title="Calendrier de réservation WK Studio"></iframe>';
+document.body.append(dialog);const frame=dialog.querySelector('iframe');let opener;
+const close=()=>dialog.close();dialog.querySelector('button').addEventListener('click',close);dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close();}});dialog.addEventListener('close',()=>{document.body.style.overflow='';opener?.focus()});
+document.addEventListener('click',e=>{const link=e.target.closest('a[href^="https://calendly.com/wk-designstudio"]');if(!link)return;e.preventDefault();opener=link;if(!frame.src){const u=new URL(link.href);u.searchParams.set('embed_domain',location.hostname);u.searchParams.set('embed_type','Inline');frame.src=u.toString();}dialog.showModal();document.body.style.overflow='hidden';});
+})();
